@@ -1,0 +1,3 @@
+rootProject.name = 'sepro_v2'
+
+include ':app'
