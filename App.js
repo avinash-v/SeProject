@@ -1,16 +1,30 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import {
+        StyleSheet,
+        Text,
+        View,
+        StatusBar
+} from 'react-native';
 
-import DishPage from './components/DishPage';
+import Routes from "./src/Routes";
 
-export default class App extends Component{
-  render() {
-    return (
-      <View style={{flex:1}}>
-      
-      </View>
-    );
-  }
+export default class App extends Component<{}> {
+        render() {
+                return (
+                        <View style={styles.container}>
+                                <StatusBar
+                                        backgroundColor= "#1c313a"
+                                        barStyle= "light-content"
+                                />
+                                <Routes />
+                        </View>
+
+                );
+        }
 }
 
-
+const styles = StyleSheet.create({
+        container: {
+                flex: 1,
+        },
+});
