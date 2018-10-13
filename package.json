@@ -1,25 +1,20 @@
 {
-  "name": "sepro_v2",
-  "version": "0.0.1",
+  "name": "piggy",
+  "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "start": "node ./bin/www"
   },
   "dependencies": {
-    "@babel/runtime": "^7.1.2",
-    "react": "16.5.0",
-    "react-native": "0.57.2",
-    "react-navigation": "^2.17.0",
-    "react-transform-hmr": "1.0.4"
-  },
-  "devDependencies": {
-    "babel-jest": "23.6.0",
-    "jest": "23.6.0",
-    "metro-react-native-babel-preset": "0.48.0",
-    "react-test-renderer": "16.5.0"
-  },
-  "jest": {
-    "preset": "react-native"
+    "body-parser": "^1.18.3",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "express": "~4.16.0",
+    "http-errors": "~1.6.2",
+    "mongodb": "^3.1.4",
+    "mongoose": "^5.3.3",
+    "morgan": "~1.9.0",
+    "node-dev": "^3.1.3",
+    "pug": "2.0.0-beta11"
   }
 }
