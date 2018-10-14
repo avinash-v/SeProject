@@ -44,12 +44,15 @@ app.post('/user/registerUser', loginPage.userRegistration);
 
 app.post('/cook/getCookDetails', cookDetails.getCookDetails);
 app.post('/cook/getNCookDetails', cookDetails.getNCookDetails);
+app.post('/cook/addCookDetails', cookDetails.addCookDetails);
 
 app.post('/customer/getCustomerDetails', customerDetails.getCustomerDetails);
 app.post('/customer/getNCustomerDetails', customerDetails.getNCustomerDetails);
+app.post('/customer/addCustomerDetails', customerDetails.addCustomerDetails);
 
 app.post('/delivery/getDerliveryDetails', deliveryDetails.getDeliveryDetails);
 app.post('/delivery/getNDerliveryDetails', deliveryDetails.getNDeliveryDetails);
+app.post('/delivery/addDeliveryDetails', deliveryDetails.addDeliveryDetails);
 
 
 // catch 404 and forward to error handler

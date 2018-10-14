@@ -4,11 +4,10 @@ var mongoUrl = "mongodb://localhost:27017";
 
 /* Incoming Customer Details */
 var userValidation = function(req, res, next){
-
 	console.log("\n----------\nValidating User");
 	console.log(req.body);
 	res.setHeader('Content-Type', 'application/json');
-
+	responseData = {};
 	mongoc.connect(mongoUrl, { useNewUrlParser: true}, function(err, db) {
 		if(err) throw err;
 		var dbo = db.db("piggy");
@@ -18,12 +17,15 @@ var userValidation = function(req, res, next){
 		dbo.collection("users").findOne(query, function(err, result){
 			if(err) throw err;
 			db.close();
+			responseData["data"] = "";
 			if(result && result.password === req.body.password){
 				console.log("password :", result.password);
-				res.send(JSON.stringify({ok: 1}));
+				responseData["ok"] = 1;
+				res.send(JSON.stringify(responseData));
 			} else{
 				console.log("wrong password");
-				res.send(JSON.stringify({ok: 0}));
+				responseData["ok"] = 0;
+				res.send(JSON.stringify(responseData));
 			}
 			console.log("----------\n");
 		});
@@ -36,6 +38,7 @@ var userRegistration = function(req, res, next){
 	console.log(req.body);
 
 	res.setHeader('Content-Type', 'application/json');
+	responseData = {}
 	mongoc.connect(mongoUrl, { useNewUrlParser: true}, function(err, db) {
 			if(err) throw err;
 			var dbo = db.db("piggy");
@@ -46,16 +49,19 @@ var userRegistration = function(req, res, next){
 				if(err) throw err;
 				if(result){
 					console.log("user already present");
-					res.send(JSON.stringify({ok: 0}));
+					responseData['ok'] = 0;
+					res.send(JSON.stringify(responseData));
 				} else{
 					dbo.collection("users").insertOne(req.body)
 						.then(()=>{
-							console.log("New User "+req.body.userName+" regsitered")
-							res.send(JSON.stringify({ok: 1}));
+							console.log("New User "+req.body.userName+" regsitered");
+							responseData["ok"] = 1;
+							res.send(JSON.stringify(responseData));
 						})
 						.catch((err)=>{
 							console.log("Error :"+err);
-							res.send(JSON.stringify({ok: 0}));
+							responseData["ok"] = 0;
+							res.send(JSON.stringify(responseData));
 						});
 				}
 				db.close();
