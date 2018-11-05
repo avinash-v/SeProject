@@ -1,5 +1,3 @@
-rootProject.name = 'piggyfrontend'
-include ':react-native-intent-launcher'
-project(':react-native-intent-launcher').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-intent-launcher/android')
+rootProject.name = 'sepro_v2'
 
 include ':app'
