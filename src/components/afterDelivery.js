@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, Image, Button, TouchableOpacity, ImageBackground} from 'react-native';
 //import Component1 from './components/Component1';
-
+// aghaha
 export default class App extends Component{
 
   _homePage() {
