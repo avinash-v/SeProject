@@ -7,9 +7,7 @@ import ImageSlider from 'react-native-image-slider';
 
 import {serverConf,} from "../Globals";
 
-import {GetDetails,} from "../functions/GetDetails"
-
-
+import {CookDetails,} from "../functions/CookDetails"
 
 export default class CooksPage extends Component{
     constructor(props){
@@ -69,7 +67,25 @@ export default class CooksPage extends Component{
     const {items_cook, errors, loading} = this.props
 
     return (
-      <ScrollView style={styles.container}  onLoad={ ndet=GetDetails.getNCookDetails() }>
+      <ScrollView style={styles.container}  onLoad={CookDetails.getCookDetails(
+				serverConf.serverIP,
+				serverConf.serverPort,
+				this.state,)
+			.then(response => response.json())
+			.then((response)=> {
+				if(response.ok){
+					alert("Data Returned is :"+JSON.stringify(response));
+					// Linking.openURL(`https://maps.apple.com/?q=bangalore&ll=10,10`);
+				} else {
+					alert("Query unsuccessful :"+JSON.stringify(response));
+				}
+			})
+			.catch((error) => {
+				alert("Error :" +error);
+      })
+      }>
+
+
       <View style={styles.top}>
       <View>
       <Text style={styles.title}>{this.state.cooksName}</Text>
