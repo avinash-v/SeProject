@@ -19,6 +19,11 @@ import {
 	LoginFunctions,
 } from "../functions/Login_Funcs"
 
+import {
+	BgTracking
+} from '../components/LocationTracker'
+
+
 export default class Form extends Component<{}> {
 
 	constructor(props) {
@@ -27,6 +32,7 @@ export default class Form extends Component<{}> {
 					userName: '',
 					password: '',
 				};
+							this.bgl = new BgTracking();
 	}
 
 	buttonPress(type){

@@ -1,5 +1,5 @@
 var serverConf = {
-	serverIP: "192.168.1.6",
+	serverIP: "192.168.1.3",
 	serverPort: "3000",
 }
 
