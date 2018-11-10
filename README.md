@@ -13,7 +13,7 @@
  - $ npm install multer --save
  - $npm link morgan
  
- - Start Listening : node app.js
+ - Start Listening :npm start
  - connect from device to IP of webserver:3000
 
 	
