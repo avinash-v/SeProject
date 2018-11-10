@@ -8,7 +8,7 @@
  - npm install mongodb --save
  - monogod --dbpath ./data
  These may be additionally required:
-$ npm install body-parser --save
+ $ npm install body-parser --save
 $ npm install cookie-parser --save
 $ npm install multer --save
 $npm link morgan
