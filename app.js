@@ -53,7 +53,8 @@ app.post('/customer/addCustomerDetails', customerDetails.addCustomerDetails);
 app.post('/delivery/getDerliveryDetails', deliveryDetails.getDeliveryDetails);
 app.post('/delivery/getNDerliveryDetails', deliveryDetails.getNDeliveryDetails);
 app.post('/delivery/addDeliveryDetails', deliveryDetails.addDeliveryDetails);
-
+app.post('/delivery/checkDelivery', deliveryDetails.getCurrentDeliveryDetails)
+app.post('/delivery/locationUpdate', deliveryDetails.updateLocation)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

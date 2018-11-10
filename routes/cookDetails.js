@@ -30,7 +30,7 @@ var getCookDetails = function(req, res, next) {
 }
 
 var getNCookDetails = function(req, res, next) {
-	console.log("Cook's Details Get :" + req.body.n);
+	console.log("Cook's Details Get Many:" + req.body.n);
 	var cookId = req.body.cookId;
 	var n = req.body.n;
 	res.setHeader('Content-Type', 'application/json');
@@ -60,7 +60,7 @@ var getNCookDetails = function(req, res, next) {
 
 var addCookDetails = function(req, res, next) {
 	console.log("Cook's Details Add");
-	var deliveryId = req.body.deliveryId;
+	var cookId = req.body.cookId;
 	res.setHeader("Content-Type", "application/json");
 	responseData = {}
 	mongoc.connect(mongoUrl, function(err, db) {
@@ -80,6 +80,7 @@ var addCookDetails = function(req, res, next) {
 		});
 	});
 }
+
 
 module.exports = {
 	getCookDetails: getCookDetails,

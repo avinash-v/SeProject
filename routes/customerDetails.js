@@ -30,7 +30,7 @@ var getCustomerDetails = function(req, res, next) {
 }
 
 var getNCustomerDetails = function(req, res, next) {
-	console.log("Customer's Details Get :" + req.body.n);
+	console.log("Customer's Details Get Many:" + req.body.n);
 	var customerId = req.body.customerId;
 	var n = req.body.n;
 	var responseData = {};
@@ -60,7 +60,6 @@ var getNCustomerDetails = function(req, res, next) {
 
 var addCustomerDetails = function(req, res, next) {
 	console.log("Customer's Details Add");
-	var deliveryId = req.body.deliveryId;
 	res.setHeader("Content-Type", "application/json");
 	responseData = {};
 	mongoc.connect(mongoUrl, function(err, db) {

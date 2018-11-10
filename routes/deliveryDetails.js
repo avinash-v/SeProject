@@ -2,7 +2,7 @@ var mongoc = require("mongodb").MongoClient;
 var mongoUrl = "mongodb://localhost:27017";
 
 var getDeliveryDetails = function(req, res, next) {
-	console.log("Delivery's Details Get");
+	console.log("Delivery Details Get");
 	var deliveryId = req.body.deliveryId;
 	var responseData = {};
 	res.setHeader("Content-Type", "application/json");
@@ -30,7 +30,7 @@ var getDeliveryDetails = function(req, res, next) {
 }
 
 var getNDeliveryDetails = function(req, res, next) {
-	console.log("Delivery's Details Get :" + req.body.n);
+	console.log("Delivery Details Get Many :" + req.body.n);
 	var deliveryId = req.body.deliveryId;
 	var n = req.body.n;
 	var responseData = {};
@@ -60,7 +60,6 @@ var getNDeliveryDetails = function(req, res, next) {
 
 var addDeliveryDetails = function(req, res, next) {
 	console.log("Delivery's Details Add");
-	var deliveryId = req.body.deliveryId;
 	res.setHeader("Content-Type", "application/json");
 	responseData = {}
 	mongoc.connect(mongoUrl, function(err, db) {
@@ -81,8 +80,49 @@ var addDeliveryDetails = function(req, res, next) {
 	});
 }
 
+var deleteDeliveryDetails = function(req, res, next) {
+	console.log("Delivery's Details DELETE");
+	res.setHeader("Content-Type", "application/json");
+	responseData = {}
+	mongoc.connect(mongoUrl, function(err, db) {
+		if(err) throw err;
+		var dbo = db.db("piggy");
+		var query = req.body;
+		dbo.collection("deliveries").remove(query, function(err, dbResult){
+			if(err) {
+				responseData["ok"] = 0;
+				res.send(JSON.stringify(responseData));
+				throw err;
+			}
+			console.log("Deliver Details Deleted");
+			responseData["ok"] = 1;
+			res.send(JSON.stringify(responseData));
+			console.log("----------\n");
+		});
+	});
+}
+
+var getCurrentDeliveryDetails = function(req, res){
+	console.log("Delivery's Details Get Current");
+	res.setHeader("Content-Type", "application/json");
+	responseData = {"location": 1, "ok": 1}
+	res.send(JSON.stringify(responseData));
+}
+
+var updateLocation = function(req, res){
+	console.log("Delivery's Details Update Location");
+	console.log(req.body);
+	res.setHeader("Content-Type", "application/json");
+	res.sendStatus(200);
+}
+
+
+
 module.exports = {
 	getDeliveryDetails: getDeliveryDetails,
 	getNDeliveryDetails: getNDeliveryDetails,
-	addDeliveryDetails: addDeliveryDetails
+	addDeliveryDetails: addDeliveryDetails,
+	deleteDeliveryDetails: deleteDeliveryDetails,
+	getCurrentDeliveryDetails: getCurrentDeliveryDetails,
+	updateLocation: updateLocation
 }
