@@ -14,78 +14,43 @@ export default class CooksPage extends Component{
         super(props)
         this.state = {
           cooksName:"COOK'S NAME",
-          addr_details: "Anyone,Anyone, along Anyone, along Anyone, along Anyone, along Anyone, along Anyone, along  along with some of those by bishop ",
+          addr_details: "Anyone, along Anyone, along  along with some of those by bishop ",
           ratingVal: 3,
           reviews_list: [
             {
               review: "Amazing",
-            },
-            {
-              review: "Healthy and hygenic",
-            },
-            {
-              review: "good",
-            },
-            {
-              review: "HEllo , amazing",
             }
-
           ],
           Items_list: [
             {
               dish_name: 'Masala Dosa',
-              avatar_url: '/home/admi/PIGGY/images/dish1.jpg',
+              avatar_url: '/home/admi/PIGGY/src/images/dish1.jpg',
               cuisine: 'SOuth Indian'
-            },
-            {
-              dish_name: 'Arabiata Pasta',
-              avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-              cuisine: 'Italian'
-            },
-            {
-              dish_name: 'Chole Bhatura',
-              avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-              cuisine: 'North Indian'
-            },
-            {
-              dish_name: 'Amy Farha',
-              avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-              cuisine: 'Vice President'
-            },
-            {
-              dish_name: 'Amy Farha',
-              avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-              cuisine: 'Vice President'
-            },
+            }
           ],
         }
       }
 
+      _getCookDetails(details) {
+        fetch("http://192.168.1.3:3000/delivery/checkDelivery", {
+           method: 'POST',
+           headers: { 'Accept': 'application/json','Content-Type': 'application/json',},
+           body: JSON.stringify(details),
+         }).then(res => res.json())
+           .then((res)=>{
+             this.setState({cooksName:res.cooksName})
+           });
+      }
+
+    _ToLoad(){
+      var data = {CookId:this.props.userName}
+      this._getCookDetails(data)
+    }
 
   render() {
 
-    const {items_cook, errors, loading} = this.props
-
     return (
-      <ScrollView style={styles.container}  onLoad={CookDetails.getCookDetails(
-				serverConf.serverIP,
-				serverConf.serverPort,
-				this.state,)
-			.then(response => response.json())
-			.then((response)=> {
-				if(response.ok){
-					alert("Data Returned is :"+JSON.stringify(response));
-					// Linking.openURL(`https://maps.apple.com/?q=bangalore&ll=10,10`);
-				} else {
-					alert("Query unsuccessful :"+JSON.stringify(response));
-				}
-			})
-			.catch((error) => {
-				alert("Error :" +error);
-      })
-      }>
-
-
+      <ScrollView style={styles.container}  onLoad={this._ToLoad()}>
       <View style={styles.top}>
       <View>
       <Text style={styles.title}>{this.state.cooksName}</Text>
