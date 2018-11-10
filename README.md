@@ -3,7 +3,7 @@
 
 > To RUN
  - npm install
- -Clone or download the repo
+ - Clone or download the repo
  - npm install express --save
  - npm install mongodb --save
  - monogod --dbpath ./data
