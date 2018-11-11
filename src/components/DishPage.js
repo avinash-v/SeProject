@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {AppRegistry,Platform, StyleSheet, Text, View , TouchableOpacity,
-    Dimensions,ScrollView,Button, Icon, Image} from 'react-native';
+    Dimensions,ScrollView,Button, Icon,navigation, Image} from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
 
@@ -13,19 +13,37 @@ export default class DishPage extends Component{
           priceDetails:"  200gms  500/-",
           cooksName:"abc",
           reviewCont:"who reads Old and Middle English literary texts will be familiar"
-
-
         }
       }
 
       _onPress() {
         Actions.CooksPage();
+        //navigation.navigate('CooksPage', { data: { title: 'Hello World'} })
        }
+
+       _getDishDetails(details) {
+        fetch("http://192.168.1.3:3000/delivery/checkDelivery", {
+           method: 'POST',
+           headers: { 'Accept': 'application/json','Content-Type': 'application/json',},
+           body: JSON.stringify(details),
+         }).then(res => res.json())
+           .then((res)=>{
+             this.setState({description:res.description})
+             this.setState({priceDetails:res.priceDetails})
+             this.setState({cooksName:res.cooksName})
+             this.setState({reviewCont:res.reviewCont})
+           });
+      }
+
+    _ToLoad(){
+      var data = {DishId:this.props.dishName}
+      this._getDishDetails(data)
+    }
 
        //style={{flexDirection:'row' , flexWrap:'wrap'}}>
   render() {
     return (
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.container} onLoad={this._ToLoad()} >
       <View style={styles.top}>
       <View style={{flexDirection:'row' , flexWrap:'wrap' , marginBottom:5}}>
       <Text style={styles.title}>{this.state.dishName}</Text>
@@ -36,7 +54,7 @@ export default class DishPage extends Component{
       </TouchableOpacity>
       </View>
       <View > 
-      <Image source={require('../images/dish6.jpg')}  style={styles.profileImage} />
+      <Image source={require('../images/dish1.jpg')}  style={styles.profileImage} />
        <Button
         onPress={this._onPress}
         title={this.state.cooksName}

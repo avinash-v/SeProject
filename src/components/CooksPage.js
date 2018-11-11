@@ -24,15 +24,25 @@ export default class CooksPage extends Component{
           Items_list: [
             {
               dish_name: 'Masala Dosa',
-              avatar_url: '/home/admi/PIGGY/src/images/dish1.jpg',
+              price: '100',
+              cuisine: 'SOuth Indian'
+            },
+            {
+              dish_name: 'Plain Dosa',
+              price: '80',
               cuisine: 'SOuth Indian'
             }
           ],
+          OrderList:[
+          ],
+          no_ol:0,
         }
       }
+      
+
 
       _getCookDetails(details) {
-        fetch("http://192.168.1.3:3000/delivery/checkDelivery", {
+        fetch("http:localhost:3000/delivery/checkDelivery", {
            method: 'POST',
            headers: { 'Accept': 'application/json','Content-Type': 'application/json',},
            body: JSON.stringify(details),
@@ -43,9 +53,32 @@ export default class CooksPage extends Component{
       }
 
     _ToLoad(){
-      var data = {CookId:this.props.userName}
-      this._getCookDetails(data)
+      var data = {CookId:this.props.userName};
+      this._getCookDetails(data);
     }
+
+
+    updateCount(l){
+      var nowc = -1;
+      for (var i=0; i < this.state.no_ol; i++) {
+        if(l.dish_name == this.state.OrderList[i].dish_name){
+          nowc = 0;
+          this.state.OrderList[i].count = this.state.OrderList[i].count + 1;
+          break;
+        }
+    }
+    if(nowc ==-1){
+      this.state.OrderList[this.state.no_ol] = {dish_name:l.dish_name , dish_price:l.price, count:1};
+      this.state.no_ol = this.state.no_ol+1;
+     }
+     alert(this.state.no_ol);
+     this.setState({OrderList:this.state.OrderList});
+    }
+
+    goto_onPress() {
+      alert(this.state.no_ol)
+      //Actions.OrderSummary({ol:this.state.no_ol});
+     }
 
   render() {
 
@@ -84,17 +117,27 @@ export default class CooksPage extends Component{
        </View> 
        <View>
          {
-       this.state.Items_list.map((l, i) => (
-      <ListItem
-        key={i}
-        rightAvatar={{ source: {require:l.avatar_url } }}
-        title={l.dish_name}
-        subtitle={l.cuisine}
-      />
-      ))
-       }
+       this.state.Items_list.map((l, i)  => {
+        return (
+          <View key={i} style={{flexDirection:'row' , flexWrap:'wrap' , borderWidth:1 ,borderColor:'black',borderRadius:4,marginLeft:2,marginRight:2}} >
+          <Text style={styles.dish_name_st} >{l.dish_name}: Rs {l.price}</Text> 
+          <Text style={styles.price_st}></Text>
+          <Button flex right
+          onPress={() => this.updateCount(l)}
+          title="+"
+          style={styles.buttons}/>
+          </View>
+        );
+     })}
        </View>
-
+       <Button
+        onPress ={ () => {
+          //alert(this.state.no_ol)
+          Actions.OrderSummary({ol:this.state.OrderList});
+         }}
+        title='ORDER'
+        style={styles.buttons}
+        />
        <Text style={{ color:"#000000" , fontSize:28 , fontWeight:"200"}}>
          REVIEWS : 
        </Text>  
@@ -125,12 +168,35 @@ const styles = StyleSheet.create({
       backgroundColor: '#87cefa',
       
     },
+    dish_name_st: {
+      marginTop:2, 
+      fontStyle:'italic',
+      marginBottom: 5 ,
+      marginLeft:5,
+      marginRight:75,
+      alignItems:'center',
+      justifyContent: 'center',
+      fontWeight:'400', 
+      fontSize:24,
+      color:'#4169e1'
+    },
+    price_st: {
+      marginTop:2, 
+      fontStyle:'italic',
+      marginBottom: 5 ,
+      marginLeft:10,
+      alignItems:'flex-end',
+      justifyContent: 'flex-end',
+      fontWeight:'400', 
+      fontSize:24,
+      color:'#4169e1'
+    },
     title: {
       marginTop:2, 
       fontStyle:'italic',
       marginBottom: 15 ,
-      marginLeft:15,
-      marginRight:5,
+      marginLeft:5,
+      marginRight:15,
       alignItems:'center',
       justifyContent: 'center',
       fontWeight:'400', 
@@ -146,20 +212,21 @@ const styles = StyleSheet.create({
     },
     buttons:{
        color:"#4169e1",
-       width:100,
-       height:50,
+       width:10,
        backgroundColor:'#fff',
        borderRadius:100,
-       marginBottom:15
+       marginBottom:15,
+       alignItems:'flex-end',
+       justifyContent:'flex-end',
     },
     circularButton:{
       borderWidth:1,
       alignItems:'center',
       justifyContent:'center',
       borderColor:"#4169e1",
-      width:50,
-      height:50,
-      borderRadius:50,
+      width:30,
+      height:30,
+      borderRadius:30,
       backgroundColor:"#4169e1",
     },
     center:{
