@@ -61,7 +61,7 @@ var getNDeliveryDetails = function(req, res, next) {
 var addDeliveryDetails = function(req, res, next) {
 	console.log("Delivery's Details Add");
 	res.setHeader("Content-Type", "application/json");
-	responseData = {}
+	var responseData = {}
 	mongoc.connect(mongoUrl, function(err, db) {
 		if(err) throw err;
 		var dbo = db.db("piggy");
@@ -83,7 +83,7 @@ var addDeliveryDetails = function(req, res, next) {
 var deleteDeliveryDetails = function(req, res, next) {
 	console.log("Delivery's Details DELETE");
 	res.setHeader("Content-Type", "application/json");
-	responseData = {}
+	var responseData = {}
 	mongoc.connect(mongoUrl, function(err, db) {
 		if(err) throw err;
 		var dbo = db.db("piggy");
@@ -110,10 +110,44 @@ var getCurrentDeliveryDetails = function(req, res){
 }
 
 var updateLocation = function(req, res){
-	console.log("Delivery's Details Update Location");
+	console.log("Delivery's Details Update Location\n");
 	console.log(req.body);
 	res.setHeader("Content-Type", "application/json");
-	res.sendStatus(200);
+	var lat = req.body.lat;
+	var lon = req.body.lan;
+	var deliveryId = req.body.deliveryId;
+	var responseData = {}
+	mongoc.connect(mongoUrl, function(err, db) {
+		if(err){
+			responseData["ok"] = 0;
+			res.send(JSON.stringify(responseData));
+			throw err;
+		}
+		var dbo = db.db("piggy");
+		var query = {
+			'deliveryId': deliveryId,
+		}
+		var newValues = {
+			$set:  {
+				'currentLocation': {
+														'lat': lat,
+														'lon': lon
+													}
+			}
+		}
+		dbo.collection('deliveries').updateOne(query, newValues, function(err, res) {
+			if(err){
+				responseData["ok"] = 0;
+				res.send(JSON.stringify(responseData));
+				throw err;
+			}
+			console.log("Updated current delivery location");
+			responseData["ok"] = 1;
+			res.send(JSON.stringify(responseData));
+			db.close();
+			console.log("----------\n");
+		});
+	});
 }
 
 
