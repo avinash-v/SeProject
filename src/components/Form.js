@@ -19,10 +19,6 @@ import {
 	LoginFunctions,
 } from "../functions/Login_Funcs"
 
-import {
-	BgTracking
-} from '../components/LocationTracker'
-
 
 export default class Form extends Component<{}> {
 
@@ -32,7 +28,10 @@ export default class Form extends Component<{}> {
 					userName: '',
 					password: '',
 				};
-							this.bgl = new BgTracking();
+	}
+
+	chooseOptions(){
+		Actions.CustomerOptions();
 	}
 
 	buttonPress(type){
@@ -41,6 +40,7 @@ export default class Form extends Component<{}> {
 			return false;
 		}
 		if( type == "Login"){
+
 			LoginFunctions.verify(
 				serverConf.serverIP,
 				serverConf.serverPort,
@@ -51,6 +51,12 @@ export default class Form extends Component<{}> {
 				if(response.ok){
 					alert("Logged In ! :"+JSON.stringify(response));
 					// Linking.openURL(`https://maps.apple.com/?q=bangalore&ll=10,10`);
+
+					global.customerDetails = {
+							'id': this.state.userName,
+					}
+
+					this.chooseOptions();
 				} else {
 					alert("Invalid Username or Password! :"+JSON.stringify(response));
 				}

@@ -57,7 +57,7 @@ class BgTracking extends Component {
 
     BackgroundGeolocation.on('stationary', (stationaryLocation) => {
       // Actions.sendLocation(stationaryLocation);
-	  LoginFunctions.updateLocation(serverConf.serverIP, serverConf.serverPort, {"location": stationaryLocation})
+	  // LoginFunctions.updateLocation(serverConf.serverIP, serverConf.serverPort, {"location": stationaryLocation})
 
     });
 

@@ -3,15 +3,20 @@ import {Router, Stack, Scene} from 'react-native-router-flux';
 
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
+import DeliverTracker from './pages/DeliveryTracking'
+import CustomerOptions from './pages/CustomerOptions'
 
 export default class Routes extends Component<{}> {
         render() {
                 return(
                         <Router>
                                 <Stack key="root" hideNavBar={true}>
-                                        <Scene key="Login" component={Login} title="Login" initial={true}/>
+                                        <Scene key="Login" component={Login} title="Login" initial={true} />
                                         <Scene key="SignUp" component={SignUp} title="SignUp"/>
-                                </Stack>
+										<Scene key="DeliverTracker" component={DeliverTracker} title="DeliverTracker" />
+										<Scene key="CustomerOptions" component={CustomerOptions} title="CustomerOptions"/>
+
+								</Stack>
                         </Router>
                 )
         }
