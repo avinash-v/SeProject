@@ -110,7 +110,7 @@ var getCurrentDeliveryDetails = function(req, res){
 }
 
 var updateLocation = function(req, res){
-	console.log("Delivery's Details Update Location\n");
+	console.log("Delivery's Details Update Location");
 	console.log(req.body);
 	res.setHeader("Content-Type", "application/json");
 	var lat = req.body.lat;
@@ -135,7 +135,7 @@ var updateLocation = function(req, res){
 													}
 			}
 		}
-		dbo.collection('deliveries').updateOne(query, newValues, function(err, res) {
+		dbo.collection('deliveries').updateOne({}, newValues, { upsert: true },  function(err, result) {
 			if(err){
 				responseData["ok"] = 0;
 				res.send(JSON.stringify(responseData));
