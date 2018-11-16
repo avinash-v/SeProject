@@ -21,6 +21,7 @@ export default class OrderSummary extends Component{
                     price: '100'
                 }
               ],
+              totalAmount:0,
         }
       }
 
@@ -29,6 +30,10 @@ export default class OrderSummary extends Component{
       var data = {DishId:this.props.dishName}
       this._getDishDetails(data)
     }
+
+    get_total(price){
+      this.state.totalAmount = this.state.totalAmount + price;
+     }
     
     render() {
         return (
@@ -41,12 +46,25 @@ export default class OrderSummary extends Component{
        this.props.ol.map((l, i)  => {
         return (
           <View key={i} style={{flexDirection:'row' , flexWrap:'wrap' , borderWidth:1 ,borderColor:'black',borderRadius:4,marginLeft:2,marginRight:2}} >
-          <Text style={styles.dish_name_st} >{l.dish_name}: Rs {l.dish_price} * {l.count} = {l.dish_price*l.count}</Text> 
-          <Text style={styles.price_st}></Text>
+          <Text onLoad={this.get_total(l.dish_price*l.count)} style={styles.dish_name_st} >
+          {l.dish_name}: Rs {l.dish_price} * {l.count} = {l.dish_price*l.count}
+          </Text> 
           </View>
         );
      })}
        </View>
+
+      <View style={{flexDirection:'row' , flexWrap:'wrap' , borderWidth:1 ,borderColor:'black',borderRadius:4,marginLeft:2,marginRight:2}} >
+          <Text style={styles.dish_name_st} >Total Amount: Rs {this.state.totalAmount}</Text> 
+          </View>
+
+       <Button
+        onPress ={ () => {
+          Actions.ReviewPage();
+         }}
+        title='ORDER'
+        style={styles.buttons}
+        />
     </ScrollView>
   
   );
@@ -84,8 +102,16 @@ reviews:{
     fontSize:24,
     color:'#4169e1'
   },
+  buttons:{
+     color:"#4169e1",
+     width:10,
+     backgroundColor:'#fff',
+     borderRadius:100,
+     marginBottom:15,
+     alignItems:'flex-end',
+     justifyContent:'flex-end',
+  }
 });
-
 
 
 AppRegistry.registerComponent('OrderSummary', () => OrderSummary);

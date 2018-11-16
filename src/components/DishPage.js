@@ -8,45 +8,46 @@ export default class DishPage extends Component{
     constructor(props){
         super(props)
         this.state = {
-          dishName:"DISH NAME",
+          dish_name:"DISH NAME",
           description: "Anyone who reads Old and Middle English literary texts will be familiar with the mid-brown volumes of the EETS, with the symbol of Alfred's jewel embossed on the front cover. Most of the works attributed to King Alfred or to Aelfric, along with some of those by bishop ",
-          priceDetails:"  200gms  500/-",
+          price:"  200gms  500/-",
           cooksName:"abc",
           reviewCont:"who reads Old and Middle English literary texts will be familiar"
         }
       }
 
-      _onPress() {
-        Actions.CooksPage();
-        //navigation.navigate('CooksPage', { data: { title: 'Hello World'} })
-       }
+      componentDidMount(){
+        var data = {dishName:this.props.dish_name};
+        //cdata_resp = this._getDishDetails(data);
+        alert(this.props.dish_name);
+      }
 
-       _getDishDetails(details) {
-        fetch("http://192.168.1.3:3000/delivery/checkDelivery", {
+    
+      _getDishDetails(details) {
+        fetch("http://10.2.20.142:3000/cook/getDishDetails", {
            method: 'POST',
            headers: { 'Accept': 'application/json','Content-Type': 'application/json',},
            body: JSON.stringify(details),
          }).then(res => res.json())
            .then((res)=>{
-             this.setState({description:res.description})
-             this.setState({priceDetails:res.priceDetails})
-             this.setState({cooksName:res.cooksName})
-             this.setState({reviewCont:res.reviewCont})
-           });
+            alert("Cooks Data Fetched");
+            this.setState({price:res.data.price})
+            this.setState({cooksName:res.data.cooksName})
+            })
+            .catch((error) => {
+              console.error(error);
+              alert("Error")
+            });
+            
       }
 
-    _ToLoad(){
-      var data = {DishId:this.props.dishName}
-      this._getDishDetails(data)
-    }
-
-       //style={{flexDirection:'row' , flexWrap:'wrap'}}>
+       //style={{flexDirection:'row' , flexWrap:'wrap'}}>onLoad={this._ToLoad()}
   render() {
     return (
-      <ScrollView style={styles.container} onLoad={this._ToLoad()} >
+      <ScrollView style={styles.container}>
       <View style={styles.top}>
       <View style={{flexDirection:'row' , flexWrap:'wrap' , marginBottom:5}}>
-      <Text style={styles.title}>{this.state.dishName}</Text>
+      <Text style={styles.title}>{this.state.dish_name}</Text>
       <TouchableOpacity style={styles.circularButton}>
       <Text style={{fontSize:32 , fontWeight:'200'}}>
         +
@@ -56,7 +57,10 @@ export default class DishPage extends Component{
       <View > 
       <Image source={require('../images/dish1.jpg')}  style={styles.profileImage} />
        <Button
-        onPress={this._onPress}
+        onPress={() =>{
+          Actions.CooksPage({cookId:'AD95515E-43D2-A385-4772-A9C455A5B3EE'});
+          //navigation.navigate('CooksPage', { data: { title: 'Hello World'} })
+         } }
         title={this.state.cooksName}
         style={styles.buttons}
         />
@@ -67,7 +71,7 @@ export default class DishPage extends Component{
 
        <View  style={styles.bottom}>
        <Text  style={styles.description}>{this.state.description}</Text>
-       <Text style={styles.price} >{this.state.priceDetails}</Text>
+       <Text style={styles.price} >{this.state.price}</Text>
        <Text style={{ color:"#000000" , fontSize:32 , fontWeight:"200"}}>
          REVIEWS : 
        </Text>

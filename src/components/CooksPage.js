@@ -13,24 +13,26 @@ export default class CooksPage extends Component{
     constructor(props){
         super(props)
         this.state = {
+          isLoading:false,
           cooksName:"COOK'S NAME",
+          phone_no: "8971", 
           addr_details: "Anyone, along Anyone, along  along with some of those by bishop ",
           ratingVal: 3,
           reviews_list: [
-            {
-              review: "Amazing",
-            }
+            "Amazing","Good"
           ],
           Items_list: [
             {
               dish_name: 'Masala Dosa',
               price: '100',
-              cuisine: 'SOuth Indian'
+              cuisine: 'SOuth Indian',
+              count:0
             },
             {
               dish_name: 'Plain Dosa',
               price: '80',
-              cuisine: 'SOuth Indian'
+              cuisine: 'SOuth Indian',
+              count:0
             }
           ],
           OrderList:[
@@ -38,52 +40,62 @@ export default class CooksPage extends Component{
           no_ol:0,
         }
       }
-      
 
+      componentDidMount(){
+        this.setState({isLoading:true})
+        var data = {cookId:'907B0C1B-B309-D73A-6476-FC2427B6B49A'};//this.props.cookId};
+        this._getCookDetails(data);
+        
+      }
 
+    
       _getCookDetails(details) {
-        fetch("http:localhost:3000/delivery/checkDelivery", {
+        alert("Requested");
+        fetch("http://192.168.43.179:3000/cook/getCookDetails", {
            method: 'POST',
            headers: { 'Accept': 'application/json','Content-Type': 'application/json',},
            body: JSON.stringify(details),
          }).then(res => res.json())
            .then((res)=>{
-             this.setState({cooksName:res.cooksName})
-           });
+            if(res.ok){
+            this.setState({isLoading:false});
+            alert("Cooks Data Fetched");
+            alert(res.data.cooksName)
+            this.setState({cooksName:res.data.cooksName})
+            this.setState({addr_details:res.data.addr_details})
+            this.setState({ratingVal:res.data.ratingVal})
+             }
+            })
+            .catch((error) => {
+              console.error(error);
+              alert("Error")
+            });
+            
       }
-
-    _ToLoad(){
-      var data = {CookId:this.props.userName};
-      this._getCookDetails(data);
-    }
-
-
+      
+      
     updateCount(l){
       var nowc = -1;
       for (var i=0; i < this.state.no_ol; i++) {
         if(l.dish_name == this.state.OrderList[i].dish_name){
           nowc = 0;
           this.state.OrderList[i].count = this.state.OrderList[i].count + 1;
+          l.count = this.state.OrderList[i].count;
           break;
         }
     }
     if(nowc ==-1){
       this.state.OrderList[this.state.no_ol] = {dish_name:l.dish_name , dish_price:l.price, count:1};
       this.state.no_ol = this.state.no_ol+1;
+      l.count = 1;
      }
-     alert(this.state.no_ol);
+     //alert(this.state.no_ol);
      this.setState({OrderList:this.state.OrderList});
     }
 
-    goto_onPress() {
-      alert(this.state.no_ol)
-      //Actions.OrderSummary({ol:this.state.no_ol});
-     }
-
   render() {
-
     return (
-      <ScrollView style={styles.container}  onLoad={this._ToLoad()}>
+      <ScrollView style={styles.container}>
       <View style={styles.top}>
       <View>
       <Text style={styles.title}>{this.state.cooksName}</Text>
@@ -94,8 +106,6 @@ export default class CooksPage extends Component{
         fractions={1}
         startingValue={this.state.ratingVal}
         imageSize={35}
-        onFinishRating={this.ratingCompleted}
-        onStartRating={this.ratingStarted}
         style={{ alignItems:'center'}}
         />
       <Text style={styles.description}>
@@ -115,24 +125,28 @@ export default class CooksPage extends Component{
         '../images/cookPhoto.jpg'
       ]}/>
        </View> 
-       <View>
+       <View   style={{marginTop:5,marginRight:5,marginBottom:5,marginLeft:5}}>
          {
        this.state.Items_list.map((l, i)  => {
         return (
-          <View key={i} style={{flexDirection:'row' , flexWrap:'wrap' , borderWidth:1 ,borderColor:'black',borderRadius:4,marginLeft:2,marginRight:2}} >
+          <View key={i} style={{height:35 , flexDirection:'row' , flexWrap:'wrap' , borderWidth:1 ,borderColor:'black',borderRadius:4,marginLeft:2,marginRight:2}} >
+          <View style={{width:270}}>
           <Text style={styles.dish_name_st} >{l.dish_name}: Rs {l.price}</Text> 
           <Text style={styles.price_st}></Text>
+          </View>
           <Button flex right
           onPress={() => this.updateCount(l)}
           title="+"
           style={styles.buttons}/>
+          <Text style={styles.price_st}>
+            {l.count}
+          </Text>
           </View>
         );
      })}
        </View>
        <Button
         onPress ={ () => {
-          //alert(this.state.no_ol)
           Actions.OrderSummary({ol:this.state.OrderList});
          }}
         title='ORDER'
@@ -173,11 +187,11 @@ const styles = StyleSheet.create({
       fontStyle:'italic',
       marginBottom: 5 ,
       marginLeft:5,
-      marginRight:75,
+      marginRight:55,
       alignItems:'center',
       justifyContent: 'center',
       fontWeight:'400', 
-      fontSize:24,
+      fontSize:22,
       color:'#4169e1'
     },
     price_st: {
@@ -188,7 +202,7 @@ const styles = StyleSheet.create({
       alignItems:'flex-end',
       justifyContent: 'flex-end',
       fontWeight:'400', 
-      fontSize:24,
+      fontSize:22,
       color:'#4169e1'
     },
     title: {
