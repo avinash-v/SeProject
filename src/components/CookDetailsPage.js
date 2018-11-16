@@ -5,6 +5,7 @@ import Menu, { MenuItem, MenuDivider } from 'react-native-material-menu';
 import { Actions } from 'react-native-router-flux';
 import { Slider, Avatar, ListItem, Rating } from 'react-native-elements'
 import call from 'react-native-phone-call'
+import openMap from 'react-native-open-maps';
 import getDirections from 'react-native-google-maps-directions'
 
 export default class App extends Component{
@@ -12,11 +13,11 @@ export default class App extends Component{
   constructor(props){
     super(props);
     this.checkNoti = this.checkNoti.bind(this)
-    this._callCust = this._callCust.bind(this)
+    this._callCook = this._callCook.bind(this)
     this._openMaps = this._openMaps.bind(this)
     this.state = {
-      custName: 'Chinmayee',
-      custPhoto: '',
+      cooksName: 'Manasa',
+      cooksPhoto: '',
       phone_no: '8951637833',
       addr_details: 'PES University',
       totalItemCount: 3,
@@ -36,21 +37,21 @@ export default class App extends Component{
 
   checkNoti(details) {
     //fetch("http://ec2-54-89-140-181.compute-1.amazonaws.com:3000/cook/getCookDetails", {
-    fetch("https:192.168.31.151:3000/cook/getCustomerDetails", {
+    fetch("https:192.168.31.151:3000/cook/getCookDetails", {
        method: 'POST',
        headers: { 'Accept': 'application/json','Content-Type': 'application/json',},
        body: JSON.stringify(details)
      }).then((res) => res.json())
        .then((res)=>{
-         this.setState({custName:res.custName})
-         this.setState({custPhoto:res.custPhoto})
-         this.setState({phone_no:res.phone_no})
-         this.setState({addr_details:res.addr_details})
+         this.setState({cooksName:res.cookName})
+         this.setState({cooksPhoto:res.cooksPhoto})
+         this.setState({phone_no:res.cookPhone})
+         this.setState({addr_details:res.cookAddress})
          this.setState({totalItemCount:res.totalItemCount})
        });
    }
 
-  _callCust() {
+  _callCook() {
     const args = {
       number: this.state.phone_no, // String value with the number to call
       prompt: false // Optional boolean property. Determines if the user should be prompt prior to the call
@@ -80,46 +81,46 @@ export default class App extends Component{
      getDirections(data)
    }
 
-_afterDelivery(){
-  alert("Delivery complete")
-  Actions.afterDelivery();
-}
+  _seeCustomer() {
+    clearInterval(interval)
+    Actions.customerDetails();
+  }
 
-_menu = null;
+  _menu = null;
 
-setMenuRef = ref => {
-  this._menu = ref;
-};
+  setMenuRef = ref => {
+    this._menu = ref;
+  };
 
-login = () => {
-  this._menu.hide();
-  Actions.onLogin();
-};
+  login = () => {
+    this._menu.hide();
+    Actions.onLogin();
+  };
 
-cook = () => {
-  this._menu.hide();
-  Actions.cookDetailsPage();
-};
+  cook = () => {
+    this._menu.hide();
+    Actions.cookDetailsPage();
+  };
 
-cust = () => {
-  this._menu.hide();
-  Actions.customerDetails();
-};
+  cust = () => {
+    this._menu.hide();
+    Actions.customerDetails();
+  };
 
-logout = () => {
-  this._menu.hide();
-  Actions.onLogout();
-};
+  logout = () => {
+    this._menu.hide();
+    Actions.onLogout();
+  };
 
-showMenu = () => {
-  this._menu.show();
-};
+  showMenu = () => {
+    this._menu.show();
+  };
 
 
   render() {
     return(
-      <ScrollView style={styles.container}>
-      {/* ##################################################  onLoad={this._load()} MENU  ###########################################################  */}
+      <ScrollView style={styles.container} >
+      {/* ##################################################   MENU  ###########################################################  */}
       <View style = {{flexDirection: 'row'}}>
       <Menu
         ref={this.setMenuRef}
@@ -140,19 +141,39 @@ showMenu = () => {
         <MenuItem onPress={this.logout}>Logout</MenuItem>
       </Menu>
       <Image source={require("C:/Users/AVINASH/kitchenLY/src/images/oOta.png")} style = {{ left:100,top:0,height:70,width:70}}/>
-       <TouchableOpacity onPress={this._seeCook} style = {{ left:200,top:0,height:70,width:70}}>
-        <Image
-         style = {{height:70, width:70}}
+      <ImageBackground
          source={require("C:/Users/AVINASH/kitchenLY/src/images/notifications.png")}
-        />
-       </TouchableOpacity>
+         onPress={this._seeCook}
+         style={{
+           height: 70,
+           width: 90,
+           position: 'relative', // because it's parent
+           top: 0,
+           left: 200
+         }}
+       >
+
+         <Text
+           onPress = {this._seeCook}
+           style={{
+             fontSize:40,
+             fontWeight: 'bold',
+             color: 'white',
+             position: 'absolute', // child
+             bottom: 10, // position where you want
+             left: 0
+           }}
+         >
+          {this.props.notifications}
+         </Text>
+       </ImageBackground>
        </View>
        {/* ##################################################  MENU  ###########################################################  */}
        <View style={{height:'10%',alignItems:'center'}}>
         <Text style = {{color:"#FFD700", fontSize:20,marginTop:40,alignItems:'center'}} >Total no. of Items = {this.state.totalItemCount}</Text>
        </View>
-       {/* ################################################## Customer details  ###########################################################  */}
-       <View style = {{flexDirection: 'row',padding:20,marginVertical:20,height:'20%'}}>
+       {/* ##################################################  Cook's details  ###########################################################  */}
+       <View style = {{flexDirection: 'row',marginVertical:20,padding:20,height:'20%'}}>
          <Avatar
           large
           rounded
@@ -161,14 +182,14 @@ showMenu = () => {
           activeOpacity={0.7}
           />
           <View style = {{flexDirection:'column',left:60,padding:20,flex:1,width:'50%'}} onPress={this._seeProfile}>
-            <Text style = {{color:"#FFD700"}}> {this.state.custName} </Text>
+            <Text style = {{color:"#FFD700"}}>  {this.state.cooksName} </Text>
             <TouchableOpacity style = {styles.callbutton} onPress={this._callCook}>
-              <Text style = {styles.buttonText}> Call Customer</Text>
+              <Text style = {styles.buttonText}> Call Cook</Text>
             </TouchableOpacity>
           </View>
        </View>
-       {/* ##################################################  Delivery guy details  ###########################################################  */}
-       {/* ##################################################  Delivery guy details  ###########################################################  */}
+       {/* ##################################################  Cook's details  ###########################################################  */}
+       {/* ################################################## Open Maps  ###########################################################  */}
        <View style = {{height:200,margin:10, borderColor:'blue',borderWidth:1, alignItems:'center'}}>
          <TouchableOpacity style = {{height:200}} onPress={this._openMaps}>
           <Image
@@ -177,9 +198,9 @@ showMenu = () => {
           />
          </TouchableOpacity>
        </View>
-        {/* ##################################################  Delivery guy details  ###########################################################  */}
-               <TouchableOpacity style = {styles.button} onPress={this._afterDelivery}>
-                <Text style = {styles.buttonText} > Delivered </Text>
+        {/* ##################################################  Open Maps  ###########################################################  */}
+               <TouchableOpacity style = {styles.button} onPress={this._seeCustomer}>
+                <Text style = {styles.buttonText} > See Customer </Text>
                 </TouchableOpacity>
       </ScrollView>
     )
@@ -229,7 +250,7 @@ button: {
                 backgroundColor: "#1c313a"
         },
 callbutton: {
-                        width: 150,
+                        width: 100,
                         borderRadius: 25,
                         marginVertical: 10,
                         marginLeft:50,

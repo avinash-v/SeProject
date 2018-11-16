@@ -69,7 +69,7 @@ export default class App extends Component{
       <ImageBackground source = {require("C:/Users/AVINASH/kitchenLY/src/images/background.jpg")} style = {{width:'100%', height:'100%'}} >
         <View style={styles.container}>
          <Text style = {styles.hello}>
-          Header {this.state.location}
+          Header
          </Text>
 
         </View>
