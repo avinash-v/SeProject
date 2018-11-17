@@ -158,7 +158,10 @@ var addOrderDetails = function(req, res, next) {
 
 // Assuming onDutyDeliveryGuys and freeDeliveryGuys are arrays, get intersection of those two and pick the first one
 // from https://stackoverflow.com/questions/1885557/simplest-code-for-array-intersection-in-javascript
-var assigned_dg_id = onDutyDeliveryGuys.filter(value => -1 !== freeDeliveryGuys.indexOf(value))[0];
+//var assigned_dg_id = onDutyDeliveryGuys.filter(value => -1 !== freeDeliveryGuys.indexOf(value))[0];
+
+// arrA.filter(x => arrB.includes(x))
+var assigned_dg_id = onDutyDeliveryGuys.filter(x => freeDeliveryGuys.includes(x))[0];
 var update_dg_id = {
 		$set: {"dg_id":assigned_dg_id}
 }
