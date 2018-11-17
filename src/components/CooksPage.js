@@ -14,6 +14,7 @@ export default class CooksPage extends Component{
         super(props)
         this.state = {
           isLoading:false,
+          cookId:"chinamyi45@gmail.com",
           cooksName:"COOK'S NAME",
           phone_no: "8971", 
           addr_details: "Anyone, along Anyone, along  along with some of those by bishop ",
@@ -24,13 +25,13 @@ export default class CooksPage extends Component{
           Items_list: [
             {
               dish_name: 'Masala Dosa',
-              price: '100',
+              price: 100,
               cuisine: 'SOuth Indian',
-              count:0
+              count:0 //Not in the database- Should be added 
             },
             {
               dish_name: 'Plain Dosa',
-              price: '80',
+              price: 80,
               cuisine: 'SOuth Indian',
               count:0
             }
@@ -43,7 +44,7 @@ export default class CooksPage extends Component{
 
       componentDidMount(){
         this.setState({isLoading:true})
-        var data = {cookId:'907B0C1B-B309-D73A-6476-FC2427B6B49A'};//this.props.cookId};
+        var data = {cookId:this.props.cookId,n:5};//this.props.cookId};
         this._getCookDetails(data);
         
       }
@@ -51,7 +52,7 @@ export default class CooksPage extends Component{
     
       _getCookDetails(details) {
         alert("Requested");
-        fetch("http://192.168.43.179:3000/cook/getCookDetails", {
+        fetch("http://192.168.1.7:3000/cook/getCookDetails", {
            method: 'POST',
            headers: { 'Accept': 'application/json','Content-Type': 'application/json',},
            body: JSON.stringify(details),
@@ -63,14 +64,40 @@ export default class CooksPage extends Component{
             alert(res.data.cooksName)
             this.setState({cooksName:res.data.cooksName})
             this.setState({addr_details:res.data.addr_details})
-            this.setState({ratingVal:res.data.ratingVal})
+            this.setState({ratingVal:res.data.ratingVal_avg})
+             }
+            }).then(()=>{
+            alert("Fetching Review");
+            fetch("http://192.168.1.7:3000/review/getNReviews", {
+           method: 'POST',
+           headers: { 'Accept': 'application/json','Content-Type': 'application/json',},
+           body: JSON.stringify(details),
+         }).then(res => res.json())
+           .then((res)=>{
+            if(res.ok){
+            alert("Reviews Fetched");
+            alert(res.data.cookId)
+            this.setState({reviews_list:res.data})
              }
             })
+          }).then(()=>{
+            fetch("http://192.168.1.7:3000/cook/getNDishDetails", {
+            method: 'POST',
+            headers: { 'Accept': 'application/json','Content-Type': 'application/json',},
+            body: JSON.stringify(details),
+          }).then(res => res.json())
+            .then((res)=>{
+             if(res.ok){
+             alert(res.data.cooksName)
+             this.setState({Items_list:res.data})
+              }
+             })
+          })
             .catch((error) => {
               console.error(error);
               alert("Error")
             });
-            
+             
       }
       
       
@@ -139,7 +166,7 @@ export default class CooksPage extends Component{
           title="+"
           style={styles.buttons}/>
           <Text style={styles.price_st}>
-            {l.count}
+            11 
           </Text>
           </View>
         );
@@ -147,7 +174,7 @@ export default class CooksPage extends Component{
        </View>
        <Button
         onPress ={ () => {
-          Actions.OrderSummary({ol:this.state.OrderList});
+          Actions.OrderSummary({ol:this.state.OrderList,cookId:this.props.cookId,no_ol:this.state.no_ol,cooksName:this.state.cooksName});
          }}
         title='ORDER'
         style={styles.buttons}

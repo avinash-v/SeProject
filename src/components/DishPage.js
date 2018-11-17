@@ -12,19 +12,20 @@ export default class DishPage extends Component{
           description: "Anyone who reads Old and Middle English literary texts will be familiar with the mid-brown volumes of the EETS, with the symbol of Alfred's jewel embossed on the front cover. Most of the works attributed to King Alfred or to Aelfric, along with some of those by bishop ",
           price:"  200gms  500/-",
           cooksName:"abc",
-          reviewCont:"who reads Old and Middle English literary texts will be familiar"
+          reviewCont:"who reads Old and Middle English literary texts will be familiar",
+          cookId:"Dummy"
         }
       }
 
       componentDidMount(){
-        var data = {dishName:this.props.dish_name};
-        //cdata_resp = this._getDishDetails(data);
+        var data = {dish_name:this.props.dish_name};
+        cdata_resp = this._getDishDetails(data);
         alert(this.props.dish_name);
       }
 
     
       _getDishDetails(details) {
-        fetch("http://10.2.20.142:3000/cook/getDishDetails", {
+        fetch("http://192.168.1.7:3000/cook/getDishDetails", {
            method: 'POST',
            headers: { 'Accept': 'application/json','Content-Type': 'application/json',},
            body: JSON.stringify(details),
@@ -33,6 +34,9 @@ export default class DishPage extends Component{
             alert("Cooks Data Fetched");
             this.setState({price:res.data.price})
             this.setState({cooksName:res.data.cooksName})
+            this.setState({dish_name:res.data.dish_name})            
+            this.setState({description:res.data.description})
+            this.setState({cookId:res.data.cookId})
             })
             .catch((error) => {
               console.error(error);
@@ -55,10 +59,10 @@ export default class DishPage extends Component{
       </TouchableOpacity>
       </View>
       <View > 
-      <Image source={require('../images/dish1.jpg')}  style={styles.profileImage} />
+      <Image source={require('../images/dish4.jpg')}  style={styles.profileImage} />
        <Button
         onPress={() =>{
-          Actions.CooksPage({cookId:'AD95515E-43D2-A385-4772-A9C455A5B3EE'});
+          Actions.CooksPage({cookId:this.state.cookId});
           //navigation.navigate('CooksPage', { data: { title: 'Hello World'} })
          } }
         title={this.state.cooksName}
@@ -72,12 +76,6 @@ export default class DishPage extends Component{
        <View  style={styles.bottom}>
        <Text  style={styles.description}>{this.state.description}</Text>
        <Text style={styles.price} >{this.state.price}</Text>
-       <Text style={{ color:"#000000" , fontSize:32 , fontWeight:"200"}}>
-         REVIEWS : 
-       </Text>
-       <View style={styles.reviews}>
-        <Text style={styles.description}>{this.state.reviewCont} </Text>
-       </View>
        </View>
     </ScrollView>
     );

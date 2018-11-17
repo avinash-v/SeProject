@@ -21,8 +21,36 @@ export default class OrderSummary extends Component{
                     price: '100'
                 }
               ],
-              totalAmount:0,
+              total_amt:0,
+              //totalItemsCount:this.props.no_ol,
+              cooksName:this.props.cooksName,
+              cust_name:this.props.cust_name,
+              
         }
+      }
+      
+     saveOrder() {
+        alert("Confirm Order?")
+        var data = {"custId":this.props.custId,"cookId" :this.props.cookId,"dishList":this.props.ol,"cooksName":this.props.cooksName,"cust_name": this.props.cust_name,"totalItemsCount":this.props.no_ol ,'del_status':0,"dg_assigned":0 }
+        //this.addOrder(data);
+      }
+
+      addOrder(details){
+        alert("Requested");
+        fetch("http://192.168.1.7:3000/order/addOrderDetails", {
+           method: 'POST',
+           headers: { 'Accept': 'application/json','Content-Type': 'application/json',},
+           body: JSON.stringify(details),
+         }).then(res => res.json())
+           .then((res)=>{
+            if(res.ok){
+            alert("Delicious food Ordered!!!");
+             }
+            })
+            .catch((error) => {
+              console.error(error);
+              alert("Error")
+            });
       }
 
 
@@ -32,7 +60,7 @@ export default class OrderSummary extends Component{
     }
 
     get_total(price){
-      this.state.totalAmount = this.state.totalAmount + price;
+      this.state.total_amt = this.state.total_amt + price;
      }
     
     render() {
@@ -55,11 +83,13 @@ export default class OrderSummary extends Component{
        </View>
 
       <View style={{flexDirection:'row' , flexWrap:'wrap' , borderWidth:1 ,borderColor:'black',borderRadius:4,marginLeft:2,marginRight:2}} >
-          <Text style={styles.dish_name_st} >Total Amount: Rs {this.state.totalAmount}</Text> 
+          <Text style={styles.dish_name_st} >Total Amount: Rs {this.state.total_amt}</Text> 
           </View>
 
        <Button
         onPress ={ () => {
+          alert(this.props.cookId);
+          this.saveOrder();
           Actions.ReviewPage();
          }}
         title='ORDER'

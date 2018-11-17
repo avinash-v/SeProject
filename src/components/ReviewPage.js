@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {AppRegistry,Platform, StyleSheet, Text, View , ImageBackground, TouchableOpacity,Dimensions,ScrollView,Button, Icon, Image} from 'react-native';
+import {AppRegistry,Platform, StyleSheet,TextInput, Text, View , ImageBackground, TouchableOpacity,Dimensions,ScrollView,Button, Icon, Image} from 'react-native';
 
 import {Actions} from 'react-native-router-flux';
 import { Rating , ListItem } from 'react-native-elements';
@@ -12,23 +12,40 @@ export default class ReviewPage extends Component{
         super(props)
         this.state = {
             cook_rating:0,
-            delivery_rating:0
+            cook_review:"Okayish.......",
+            delivery_rating:0,
         }
       }
 
-      cook_ratingComp(rating) {
-        this.state.cook_rating = rating;
-        alert("Rating is: " + rating);
-      }
-    
-      del_ratingComp(rating) {
-        this.state.delivery_rating = rating;
-        alert("Rating is: " + rating);
+  /*    saveReview() {
+        alert("Saving Review.......")
+        var data = {"custId":'', "cust_name": "", "cookId" :'', "ratingVal" : this.state.cook_rating,
+         "review" : this.state.cook_review, "dg_id" : '', "rating_dg" :this.state.delivery_rating}
+         //this.addReview(data);
+      }*/
+
+      addReview(details){
+        alert("Requested");
+        fetch("http://192.168.1.7:3000/review/addReview", {
+           method: 'POST',
+           headers: { 'Accept': 'application/json','Content-Type': 'application/json',},
+           body: JSON.stringify(details),
+         }).then(res => res.json())
+           .then((res)=>{
+            if(res.ok){
+            alert("Thank you for the review!!");
+             }
+            })
+            .catch((error) => {
+              console.error(error);
+              alert("Error")
+            });
       }
     
     render() {
         return (
         <ScrollView>
+          <View>
        <Text style={styles.delivered}>
          ORDER DELIVERED !!!!
        </Text>  
@@ -40,9 +57,20 @@ export default class ReviewPage extends Component{
         fractions={1}
         startingValue={0}
         imageSize={35}
-        onFinishRating={this.cook_ratingComp}
+        onFinishRating={ (rating) => {
+          this.setState({cook_rating:rating});
+        alert("Rating is: " + rating);
+        }}
         onStartRating={this.ratingStarted}
         style={{ alignItems:'center'}}
+        />
+        <Text style={styles.title}>Review the cook!!</Text>
+        <TextInput
+          style={{width:256 , height: 50 ,borderWidth:1,alignSelf:'center',
+            borderColor:'black',
+            borderRadius:2,}}
+          onChangeText={(cook_review) => this.setState({cook_review})}
+          value={this.state.cook_review}
         />
         <Text style={styles.title} >The Delivery:</Text>
        <Rating
@@ -51,12 +79,33 @@ export default class ReviewPage extends Component{
         fractions={1}
         startingValue={0}
         imageSize={35}
-        onFinishRating={this.del_ratingComp}
+        onFinishRating={ (rating) => {
+          this.setState({delivery_rating:rating});
+        alert("Rating is: " + rating);
+        }}
         onStartRating={this.ratingStarted}
-        style={{ alignItems:'center'}}
+        style={{ alignItems:'center',marginBottom:5}}
         />
+        </View>
+        <View>
+        <Button
+  title="SAVE REVIEW"
+  titleStyle={{ fontWeight: "700" }}
+  buttonStyle={{
+    backgroundColor: "rgba(92, 99,216, 1)",
+    width: 100,
+    height: 45,
+    borderRadius: 5}}
+    onPress ={ () => {
+        alert("Saving Review.......");
+        alert("CustId",this.props.custId);
+        var data = {"custId":'', "cust_name":'', "cookId" :'', "ratingVal" : this.state.cook_rating,
+         "review" : this.state.cook_review, "dg_id" : '', "rating_dg" :this.state.delivery_rating};
+         this.addReview(data);
+     }}
+      />
+        </View>
     </ScrollView>
-  
   );
 }
 }
@@ -67,11 +116,10 @@ reviews:{
     marginRight:8,
     alignItems:'center',
     justifyContent: 'center',
-    fontSize:24,
+    fontSize:22,
     fontWeight:"100",
   },
   title: {
-    marginTop:2, 
     fontStyle:'italic',
     marginBottom: 5 ,
     marginLeft:5,

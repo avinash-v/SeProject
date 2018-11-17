@@ -8,7 +8,7 @@ export default class DishesList extends Component{
     super(props)
     this.state = {
   data: [
-    {dish_name: "IDLY",  price:"Rs. 25.00", image:"http://2.bp.blogspot.com/-1Vy8ilCzfok/TacfNwOU_TI/AAAAAAAAAM8/50Y8NDG2FM8/s1600/Samabr.jpg"},
+    {dish_name: "Aloo Paratha",  price:"Rs. 25.00", image:"http://2.bp.blogspot.com/-1Vy8ilCzfok/TacfNwOU_TI/AAAAAAAAAM8/50Y8NDG2FM8/s1600/Samabr.jpg"},
     {dish_name: "MASALA DOSA",  price:"Rs. 30.00", image:"http://feenix.co.in/wp-content/uploads/2017/12/7-696x364.jpg"} ,
     {dish_name: "CHOW CHOW BATH", price:"Rs 25.00", image:"https://www.vegrecipesofindia.com/wp-content/uploads/2016/10/chow-chow-bhaat-recipe-2.jpg"},
     {dish_name: "PLAIN DOSA",  price:"Rs. 25.00", image:"https://www.vegrecipesofindia.com/wp-content/uploads/2016/09/methi-dosa-recipe-2.jpg"},
@@ -40,7 +40,7 @@ componentDidMount(){
 
 _getNDishDetails(details) {
   alert("Requested");
-  fetch("http://54.161.219.30:3000/cook/getNDishDetails", {
+  fetch("http://192.168.1.7:3000/cook/getNDishDetails", {
      method: 'POST',
      headers: { 'Accept': 'application/json','Content-Type': 'application/json',},
      body: JSON.stringify(details),
@@ -90,7 +90,7 @@ render() {
               </View>
             </View>
 
-            <Image style={styles.cardImage} source={{src:this.state.images_lst[0]}}/>
+            <Image style={styles.cardImage} source={require('../images/dish5.jpg')}/>
 
             <View style={styles.cardFooter}>
               <View style={styles.socialBarContainer}>
