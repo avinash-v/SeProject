@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {AppRegistry,FlatList, StyleSheet, Text, View , ImageBackground, TouchableOpacity,Dimensions,ScrollView,Button, Icon, Image, Slider} from 'react-native';
 
 import {Actions} from 'react-native-router-flux';
+import {serverConf,} from "../Globals";
 
 export default class DishesList extends Component{
   constructor(props){
@@ -33,21 +34,21 @@ export default class DishesList extends Component{
 }
 
 componentDidMount(){
-  //var dl= {cusineName:this.props.queryStr, n:10};
+  var dl= {cuisine:this.props.queryStr, n:10};
   alert(this.props.queryStr)
-  //this._getDishDetails(dl);
+  this._getNDishDetails(dl);
 }
 
 _getNDishDetails(details) {
   alert("Requested");
-  fetch("http://192.168.1.7:3000/cook/getNDishDetails", {
+  fetch("http://" + serverConf.serverIP + ":" + serverConf.serverPort + "/cook/getNCuisineDetails", {
      method: 'POST',
      headers: { 'Accept': 'application/json','Content-Type': 'application/json',},
      body: JSON.stringify(details),
    }).then(res => res.json())
      .then((res)=>{
       if(res.ok){
-      alert("Cooks dishes_lst Fetched");
+      alert(res.data[0].dish_name);
       this.setState({data:res.data})
        }
       })
@@ -84,10 +85,15 @@ render() {
           <View style={styles.card}>
 
            <View style={styles.cardHeader}>
-              <View>
+              <View style={{flex:1,flexDirection:"row"}}>
                 <Text style={styles.dish_name}>{item.dish_name}</Text>
-                <Text style={styles.price}>{item.price}</Text>
+                <TouchableOpacity style={styles.circularButton}>
+                <Text style={{fontSize:18 , fontWeight:'100'}}>
+                {item.total_no}
+                </Text>
+              </TouchableOpacity>
               </View>
+              <Text style={styles.price}>Rs:{item.price}</Text>
             </View>
 
             <Image style={styles.cardImage} source={require('../images/dish5.jpg')}/>
@@ -143,7 +149,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderTopLeftRadius: 1,
     borderTopRightRadius: 1,
-    flexDirection: 'row',
+    flexDirection: 'column',
+    flex:1,
     justifyContent: 'space-between',
   },
   cardContent: {
@@ -202,7 +209,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-  }
+  },
+    circularButton:{
+      borderWidth:1,
+      alignItems:'center',
+      justifyContent:'center',
+      borderColor:"#4169e1",
+      width:30,
+      height:30,
+      borderRadius:30,
+
+    },
 });
 
 AppRegistry.registerComponent('DishesList', () => DishesList);

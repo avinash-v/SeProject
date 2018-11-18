@@ -12,9 +12,9 @@ export default class SearchPage extends Component {
       width: Dimensions.get('window').width,
       text: "Search For Dishes or Cooks",
       data: [
-        {title: "NORTH INDIAN",  image:"https://www.asian-recipe.com/cms3/wp-content/uploads/2012/10/indian-cuisine-introduction.jpg", query:'North Indian',},
+        {title: "NORTH INDIAN",  image:"https://www.asian-recipe.com/cms3/wp-content/uploads/2012/10/indian-cuisine-introduction.jpg", query:"North Indian",},
         {title: "CHINESE",   image:"https://i.ndtvimg.com/i/2016-06/noodles-625_625x350_41465896870.jpg?downsize=650:400&output-quality=70&output-format=webp", query:'chinese',} ,
-        {title: "ITALIAN",  image:"https://www.militarytownadvisor.com/file/wp-uploads/2013/07/rev2-1024x768.jpg", query:'italian',},
+        {title: "ITALIAN",  image:"https://www.google.co.in/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwjMvf_urN3eAhUXSI8KHTSzCsIQjRx6BAgBEAU&url=https%3A%2F%2Fwww.tuscanigrill.com%2F&psig=AOvVaw3292vSbAZe-HD0sTgYNuq_&ust=1542610155452771", query:'italian',},
         {title: "AMERICAN",   image:"https://spoonacular.com/application/frontend/images/academy/American-cuisine.jpg", query:'american',},
         {title: "SOUTH INDIAN",   image:"https://lifeandtrendz.com/wp-content/uploads/2015/08/Onam-special-Sadhya-at-Ente-Keralam-2-300x196.jpg", query:'namma_nadu',},
         {title: "BAKERY",   image:"https://static.standard.co.uk/s3fs-public/thumbnails/image/2015/03/18/15/Ottolenghi.jpg?width=1000&height=614&fit=bounds&format=pjpg&auto=webp&quality=70&crop=16:9,offset-y0.5",query:'bakery',},

@@ -52,7 +52,7 @@ export default class CooksPage extends Component{
     
       _getCookDetails(details) {
         alert("Requested");
-        fetch("http://192.168.1.7:3000/cook/getCookDetails", {
+        fetch("http://" + serverConf.serverIP + ":" + serverConf.serverPort +"/cook/getCookDetails", {
            method: 'POST',
            headers: { 'Accept': 'application/json','Content-Type': 'application/json',},
            body: JSON.stringify(details),
@@ -68,7 +68,7 @@ export default class CooksPage extends Component{
              }
             }).then(()=>{
             alert("Fetching Review");
-            fetch("http://192.168.1.7:3000/review/getNReviews", {
+            fetch("http://" + serverConf.serverIP + ":" + serverConf.serverPort +"/review/getNReviews", {
            method: 'POST',
            headers: { 'Accept': 'application/json','Content-Type': 'application/json',},
            body: JSON.stringify(details),
@@ -81,7 +81,7 @@ export default class CooksPage extends Component{
              }
             })
           }).then(()=>{
-            fetch("http://192.168.1.7:3000/cook/getNDishDetails", {
+            fetch("http://" + serverConf.serverIP + ":" + serverConf.serverPort +"/cook/getNDishDetails", {
             method: 'POST',
             headers: { 'Accept': 'application/json','Content-Type': 'application/json',},
             body: JSON.stringify(details),
@@ -89,6 +89,7 @@ export default class CooksPage extends Component{
             .then((res)=>{
              if(res.ok){
              alert(res.data.cooksName)
+             res.data.count = 0
              this.setState({Items_list:res.data})
               }
              })
@@ -146,17 +147,17 @@ export default class CooksPage extends Component{
        <View  style={styles.bottom}>
        <View style={{height:200}}>
        <ImageSlider images={[
-        '../images/cookPhoto.jpg',
-        '../images/cookPhoto.jpg',
-        '../images/cookPhoto.jpg',
-        '../images/cookPhoto.jpg'
+         "http://www.manjulaskitchen.com/blog/wp-content/uploads/aloo_paratha1.jpg",
+         "https://www.vegrecipesofindia.com/wp-content/uploads/2016/10/chow-chow-bhaat-recipe-2.jpg",
+         "https://www.vegrecipesofindia.com/wp-content/uploads/2016/09/methi-dosa-recipe-2.jpg",
+         "https://upload.wikimedia.org/wikipedia/commons/d/d8/Puri_A.jpg"
       ]}/>
        </View> 
        <View   style={{marginTop:5,marginRight:5,marginBottom:5,marginLeft:5}}>
          {
        this.state.Items_list.map((l, i)  => {
         return (
-          <View key={i} style={{height:35 , flexDirection:'row' , flexWrap:'wrap' , borderWidth:1 ,borderColor:'black',borderRadius:4,marginLeft:2,marginRight:2}} >
+          <View key={i} style={{flexDirection:'row' , flexWrap:'wrap' , borderWidth:1 ,borderColor:'black',borderRadius:4,marginLeft:2,marginRight:2}} >
           <View style={{width:270}}>
           <Text style={styles.dish_name_st} >{l.dish_name}: Rs {l.price}</Text> 
           <Text style={styles.price_st}></Text>
@@ -166,7 +167,7 @@ export default class CooksPage extends Component{
           title="+"
           style={styles.buttons}/>
           <Text style={styles.price_st}>
-            11 
+            {l.count}
           </Text>
           </View>
         );
@@ -182,15 +183,15 @@ export default class CooksPage extends Component{
        <Text style={{ color:"#000000" , fontSize:28 , fontWeight:"200"}}>
          REVIEWS : 
        </Text>  
-       <View style={styles.reviews}>
+       <View>
        {
-       this.state.reviews_list.map((l, i) => (
-      <ListItem
-        key={i}
-        title={l.review}
-      />
-      ))
-       }
+       this.state.reviews_list.map((l, i)   => {
+        return (
+          <View style={styles.reviews}>
+      <Text>{l.review}</Text>
+      </View>
+      );
+    })}
        </View>
        </View>
     </ScrollView>
@@ -288,6 +289,7 @@ const styles = StyleSheet.create({
         color:'#000000',
         alignItems:'center',
       justifyContent: 'center',
+      alignSelf:'center',
       marginBottom:10,
       marginLeft:5,
       marginRight:5
@@ -307,11 +309,13 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
     },
     reviews:{
-      borderWidth:5 ,
+      borderWidth:3 ,
       borderColor:'#4169e1',
       borderRadius:4,
       marginLeft:8,
-      marginRight:8
+      marginRight:8,
+      fontSize:22,
+      marginBottom:1
     }
   });
 

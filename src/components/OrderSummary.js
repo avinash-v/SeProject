@@ -6,6 +6,7 @@ import { Rating , ListItem } from 'react-native-elements';
 
 import TouchableScale from 'react-native-touchable-scale' 
 import LinearGradient from 'react-native-linear-gradient' 
+import {serverConf,} from "../Globals";
 
 export default class OrderSummary extends Component{
     constructor(props){
@@ -32,12 +33,12 @@ export default class OrderSummary extends Component{
      saveOrder() {
         alert("Confirm Order?")
         var data = {"custId":this.props.custId,"cookId" :this.props.cookId,"dishList":this.props.ol,"cooksName":this.props.cooksName,"cust_name": this.props.cust_name,"totalItemsCount":this.props.no_ol ,'del_status':0,"dg_assigned":0 }
-        //this.addOrder(data);
+        this.addOrder(data);
       }
 
       addOrder(details){
         alert("Requested");
-        fetch("http://192.168.1.7:3000/order/addOrderDetails", {
+        fetch("http://" + serverConf.serverIP + ":" + serverConf.serverPort +"/order/addOrderDetails", {
            method: 'POST',
            headers: { 'Accept': 'application/json','Content-Type': 'application/json',},
            body: JSON.stringify(details),

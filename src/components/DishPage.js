@@ -3,6 +3,7 @@ import {AppRegistry,Platform, StyleSheet, Text, View , TouchableOpacity,
     Dimensions,ScrollView,Button, Icon,navigation, Image} from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
+import {serverConf,} from "../Globals";
 
 export default class DishPage extends Component{
     constructor(props){
@@ -25,7 +26,7 @@ export default class DishPage extends Component{
 
     
       _getDishDetails(details) {
-        fetch("http://192.168.1.7:3000/cook/getDishDetails", {
+        fetch("http://" + serverConf.serverIP + ":" + serverConf.serverPort +"/cook/getDishDetails", {
            method: 'POST',
            headers: { 'Accept': 'application/json','Content-Type': 'application/json',},
            body: JSON.stringify(details),
@@ -52,11 +53,6 @@ export default class DishPage extends Component{
       <View style={styles.top}>
       <View style={{flexDirection:'row' , flexWrap:'wrap' , marginBottom:5}}>
       <Text style={styles.title}>{this.state.dish_name}</Text>
-      <TouchableOpacity style={styles.circularButton}>
-      <Text style={{fontSize:32 , fontWeight:'200'}}>
-        +
-      </Text>
-      </TouchableOpacity>
       </View>
       <View > 
       <Image source={require('../images/dish4.jpg')}  style={styles.profileImage} />
@@ -65,7 +61,7 @@ export default class DishPage extends Component{
           Actions.CooksPage({cookId:this.state.cookId});
           //navigation.navigate('CooksPage', { data: { title: 'Hello World'} })
          } }
-        title={this.state.cooksName}
+        title="See Cook..."
         style={styles.buttons}
         />
        </View>
@@ -75,7 +71,7 @@ export default class DishPage extends Component{
 
        <View  style={styles.bottom}>
        <Text  style={styles.description}>{this.state.description}</Text>
-       <Text style={styles.price} >{this.state.price}</Text>
+       <Text style={styles.price} >Price: Rs. {this.state.price}</Text>
        </View>
     </ScrollView>
     );
@@ -152,14 +148,13 @@ const styles = StyleSheet.create({
       marginBottom:10
     },
     price:{
-      borderWidth:5 ,
-      borderColor:'red',
+      alignSelf:'center',
+      borderWidth:3 ,
+      borderColor:'#4169e1',
       borderRadius:8,
-      marginLeft:8,
-      marginRight:8,
       marginBottom:10,
       marginTop:10 ,
-      fontSize:32,
+      fontSize:22,
       fontWeight:'100',
       color:'#000000',
       alignItems:'center',

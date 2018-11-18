@@ -3,7 +3,7 @@ import {AppRegistry,Platform, StyleSheet,TextInput, Text, View , ImageBackground
 
 import {Actions} from 'react-native-router-flux';
 import { Rating , ListItem } from 'react-native-elements';
-
+import {serverConf,} from "../Globals";
 import TouchableScale from 'react-native-touchable-scale' 
 import LinearGradient from 'react-native-linear-gradient' 
 
@@ -26,7 +26,7 @@ export default class ReviewPage extends Component{
 
       addReview(details){
         alert("Requested");
-        fetch("http://192.168.1.7:3000/review/addReview", {
+        fetch("http://" + serverConf.serverIP + ":" + serverConf.serverPort +"/review/addReview", {
            method: 'POST',
            headers: { 'Accept': 'application/json','Content-Type': 'application/json',},
            body: JSON.stringify(details),
