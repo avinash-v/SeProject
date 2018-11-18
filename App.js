@@ -10,8 +10,7 @@ import ReviewPage from './src/components/ReviewPage';
 import DeliverTracker from './src/components/DeliverTracker';
 import  DishesList from './src/components/DishesList';
 import SearchPage from './src/components/SearchPage';
-import CustomerOptions from './src/components/CustomerOptions';
-        
+
 export default class App extends Component{
   render() {
     return (
